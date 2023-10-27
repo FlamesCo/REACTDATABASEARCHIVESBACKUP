@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>React Chess Game</title>
+  <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    function Square(props) {
+      return (
+        <button style={{width: '60px', height: '60px', fontSize: '24px'}}>
+          {props.value}
+        </button>
+      );
+    }
+
+    class Board extends React.Component {
+      renderSquare(i) {
+        return <Square value={this.props.squares[i]} />;
+      }
+
+      render() {
+        return (
+          <div>
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((row) => (
+              <div className="board-row">
+                {[0, 1, 2, 3, 4, 5, 6, 7].map((col) => this.renderSquare(row * 8 + col))}
+              </div>
+            ))}
+          </div>
+        );
+      }
+    }
+
+    class Game extends React.Component {
+      constructor(props) {
+        super(props);
+        this.state = {
+          squares: Array(64).fill(null),
+        };
+      }
+
+      componentDidMount() {
+        // Initialize board with chess pieces (represented by single-character strings for simplicity)
+        const initialSquares = [
+          'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
+          'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
+          null, null, null, null, null, null, null, null,
+          null, null, null, null, null, null, null, null,
+          null, null, null, null, null, null, null, null,
+          null, null, null, null, null, null, null, null,
+          'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+          'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+        ];
+        this.setState({ squares: initialSquares });
+      }
+
+      render() {
+        return (
+          <div className="game">
+            <div className="game-board">
+              <Board squares={this.state.squares} />
+            </div>
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(
+      <Game />,
+      document.getElementById('root')
+    );
+  </script>
+  <style>
+    .board-row {
+      display: flex;
+    }
+  </style>
+</body>
+</html>
